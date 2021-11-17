@@ -9,13 +9,19 @@
 	"engines": {
 		"vscode": "^1.62.0"
 	},
+	"scripts": {
+		"vscode:prepublish": "npm run esbuild-base -- --minify",
+		"esbuild-base": "esbuild ./extension.js --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+		"esbuild": "npm run esbuild-base -- --sourcemap",
+		"esbuild-watch": "npm run esbuild-base -- --sourcemap --watch"
+	},
 	"categories": [
 		"Other"
 	],
 	"activationEvents": [
 		"onCommand:fortuneteller.uploadMetaData"
 	],
-	"main": "./extension.js",
+	"main": "./out/main.js",
 	"contributes": {
 		"commands": [
 			{
@@ -25,12 +31,13 @@
 		]
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.62.0",
 		"@types/glob": "^7.1.4",
 		"@types/node": "14.x",
+		"@types/vscode": "^1.62.0",
+		"@vscode/test-electron": "^1.6.2",
+		"esbuild": "^0.13.14",
 		"eslint": "^8.1.0",
-		"glob": "^7.1.7",
-		"@vscode/test-electron": "^1.6.2"
+		"glob": "^7.1.7"
 	},
 	"dependencies": {
 		"archiver": "^5.3.0",
