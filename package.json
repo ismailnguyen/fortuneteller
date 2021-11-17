@@ -2,6 +2,7 @@
 	"name": "fortuneteller",
 	"displayName": "fortuneteller",
 	"description": "SFCC meta data uploader",
+	"publisher": "ismailnguyen",
 	"author": "Ismaïl NGUYEN <nguyen.ismail@gmail.com>",
 	"repository": "https://github.com/ismailnguyen/fortuneteller.git",
 	"license": "WTFPL (http://www.wtfpl.net)",
