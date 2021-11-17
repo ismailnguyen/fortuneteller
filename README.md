@@ -1,65 +1,115 @@
-# fortuneteller README
-
-This is the README for your extension "fortuneteller". After writing up a brief description, we recommend including the following sections.
+# fortuneteller
+Salesforce Commerce Cloud aka SFCC/Demandware meta data uploader VS Code extension
 
 ## Features
+* Upload and import meta datas with one command
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+## Usage
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+After installing the extension, open the Command Palette and type `Fortuneteller: Upload meta data` (Ctrl+Shift+P in Windows, Cmd+Shift+P in Mac OS).
+You should see toasts appearing and informing you about the status of upload and import of meta datas.
 
 ## Requirements
 
 If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- SFCC developer sandbox with admin rights
+- API user with client id and secret (created from Salesforce's Account Manager)
+- VSCode version > v1.62.2
+- A code workspace with a dw.json file
+- SFCC developer sandbox
+- Internet connection
+- Electricity (otherwise your computer will shut down)
 
-## Extension Settings
+## Setup
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+### Sandbox permissions (WebDAV and OCAPI)
+In order to allow `fortuneteller` to upload the metadata into the sandbox (using WebDAV), and import the metadata by executing the out of the box SFCC job `sfcc-site-archive-import`, you need to give permission to the previously created API user (cf. Requirements).
 
-For example:
+#### WebDAV permissions
+In your sandbox, under `Administration > Organization > WebDAV Client Permissions`, use the following snippet by replacing `my_client_id` with your API user's client ID. Note, if you already have WebDAV Client Permissions configured, e.g. for other API keys, you have to merge this permission set into the existing list of permission sets for the other clients.
 
-This extension contributes the following settings:
+```json
+{
+   "clients":[
+      {
+         "client_id": "my_client_id",
+         "permissions":[
+            {
+               "operations":[
+                  "read_write"
+               ],
+               "path": "/impex"
+            }
+         ]
+      }
+   ]
+}
+```
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+#### OCAPI settings
+In your sandbox, under `Administration > Site Development > Open Commerce API Settings`, use the following snippet by replacing `my_client_id` with your API user's client ID. Note, if you already have Open Commerce API Settings configured, e.g. for other API keys, you have to merge this permission set into the existing list of permission sets for the other clients.
+
+```json
+{
+   "_v": "19.5",
+   "clients":[
+      {
+         "client_id": "my_client_id",
+         "resources":[
+            {
+               "resource_id": "/jobs/*/executions",
+               "methods":[
+                  "post"
+               ],
+               "read_attributes": "(**)",
+               "write_attributes": "(**)"
+            },
+            {
+               "resource_id": "/jobs/*/executions/*",
+               "methods":[
+                  "get"
+               ],
+               "read_attributes": "(**)",
+               "write_attributes": "(**)"
+            }
+         ]
+      }
+   ]
+}
+```
+
+### Extension settings
+Create (if not already exists) a `dw.json` inside your code workspace using the following snippet by replacing `my_client_id` with your API user's client ID and `my_client_secret` with your API user's client secret. Note, if you already have a `dw.json` in your workspace, e.g. for cartridges upload with Prophet extension, you have to merge this configuration into the existing `dw.json`.
+```json
+{
+    "client-id": "my_client_id",
+    "client-secret": "my_client_secret",
+    "metadata-files": [
+        "myFirstProject/site_template/meta/system-objecttype-extensions.xml",
+        "myFirstProject/site_template/meta/system-objecttype-extensions.xml",
+        "test-repo/data/meta/custom-objecttype-extensions.xml",
+        "anotherProject/custom-objecttype-definitions.xml",
+        "as many paths to meta data files in this array"
+    ]
+}
+```
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Nothing yet.
+Please post them into 
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Initial release of `fortuneteller` extension.
+* Read `dw.json` to parse configuration and get client id, client secret and list of meta data file paths
+* Archive all meta data xml files into one .zip archive (using archiver npm package)
+* Upload the archived .zip file into the sandbox using sfcc-ci npm package
+* Import the uploaded archive file using sfcc-ci npm package
+* Inform user with toasts about upload/import status and about errors
+* Add explanation on usage in the README
 
 -----------------------------------------------------------------------------------------------------------
 
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
