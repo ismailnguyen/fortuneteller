@@ -10,6 +10,7 @@
 	"engines": {
 		"vscode": "^1.62.0"
 	},
+	"icon": "images/icon.png",
 	"scripts": {
 		"vscode:prepublish": "npm run esbuild-base -- --minify",
 		"esbuild-base": "esbuild ./extension.js --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
