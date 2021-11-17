@@ -6,7 +6,7 @@
 	"author": "Ismaïl NGUYEN <nguyen.ismail@gmail.com>",
 	"repository": "https://github.com/ismailnguyen/fortuneteller.git",
 	"license": "WTFPL (http://www.wtfpl.net)",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"engines": {
 		"vscode": "^1.62.0"
 	},

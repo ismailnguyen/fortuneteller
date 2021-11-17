@@ -111,5 +111,9 @@ Initial release of `fortuneteller` extension.
 * Inform user with toasts about upload/import status and about errors
 * Add explanation on usage in the README
 
+### 1.0.1
+
+* Add a icon for the extension
+
 -----------------------------------------------------------------------------------------------------------
 
