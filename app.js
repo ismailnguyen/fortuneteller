@@ -21,9 +21,11 @@ function archiveFiles(archiveName, targetDirectory, files) {
 
         archive.pipe(output);
 
-        files.forEach(filepath => {
+        files
+        .flatMap(file => file)
+        .forEach(filepath => {
             let fileName = filepath.replace(/^.*[\\\/]/, '');
-            archive.file(targetDirectory + '/' + filepath, { name: 'site_template/meta/' + fileName })
+            archive.file(filepath, { name: 'site_template/meta/' + fileName })
         });
         
         archive.finalize();
@@ -99,12 +101,18 @@ function findMetadataFiles (configuration) {
             reject('Meta data are empty in dw.json');
             return;
         }
+        Promise.all(metadataFiles.map(metadataFile => {
+            return vscode.workspace.findFiles(metadataFile).then(files => {
+                if (!files || files.length === 0) {
+                    reject('Fortuneteller: File ' + metadataFile + ' is not found');
+                    return;
+                }
 
-        vscode.workspace.workspaceFolders.forEach(folder => {
-            let targetDirectory = folder.uri.path;
-
-            resolve({ targetDirectory: targetDirectory, metadataFiles: metadataFiles });
-        })
+                return files.map(file => file.path);
+            })
+        }))
+        .then(foundFiles => resolve({ targetDirectory: vscode.workspace.workspaceFolders[0].uri.path, metadataFiles: foundFiles }))
+        .catch(err => reject('Fortuneteller: Error while looking for meta data files: ' + err));
     })
 }
 

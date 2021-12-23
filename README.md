@@ -11,7 +11,6 @@ You should see toasts appearing and informing you about the status of upload and
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 - SFCC developer sandbox with admin rights
 - API user with client id and secret (created from Salesforce's Account Manager)
 - VSCode version > v1.62.2
@@ -97,7 +96,7 @@ Create (if not already exists) a `dw.json` inside your code workspace using the 
 ## Known Issues
 
 Nothing yet.
-Please post them into 
+Please post them into [Issues](https://github.com/ismailnguyen/fortuneteller/issues)
 
 ## Release Notes
 
